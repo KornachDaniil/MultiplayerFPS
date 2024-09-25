@@ -18,7 +18,6 @@ AFPSCharacter::AFPSCharacter()
 	FollowCamera->SetupAttachment(GetMesh(), "Camera");
 	GetCharacterMovement()->MaxWalkSpeed = 800.0f;
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
-	
 }
 
 // Called when the game starts or when spawned
@@ -31,6 +30,7 @@ void AFPSCharacter::BeginPlay()
 	{
 		return;
 	}
+	SetHealth(MaxHealth);
 }
 
 // Called to bind functionality to input
@@ -101,4 +101,3 @@ void AFPSCharacter::ArmorAbsorbDamage(float& Damage)
 
 	Damage = (Damage * (1 - ArmorAbsorption)) - FMath::Min(RemainingArmor, 0.0f);
 }
-

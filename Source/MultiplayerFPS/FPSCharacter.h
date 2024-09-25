@@ -18,8 +18,6 @@ public:
 	// Sets default values for this character's properties
 	AFPSCharacter();
 
-	
-
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FollowCamera;
 	
@@ -33,8 +31,10 @@ protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
+	UFUNCTION(BlueprintCallable)
 	void SetHealth(float Amount) { Health = Amount; }
 	void AddHealth(float Amount) { SetHealth(Health + Amount); }
+	UFUNCTION(BlueprintCallable)
 	void RemoveHealth(float Amount) { SetHealth(Health - Amount); }
 	bool IsDead() const { return Health == 0.0f; }
 
