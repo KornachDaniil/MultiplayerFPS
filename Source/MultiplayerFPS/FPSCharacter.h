@@ -42,6 +42,8 @@ public:
 	FORCEINLINE FVector GetCameraLocation() const { return FollowCamera->GetComponentLocation(); }
 	FORCEINLINE FVector GetCameraDirection() const { return  GetControlRotation().Vector(); }
 
+	bool IsDead() const { return Health == 0.0f; }
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FollowCamera;
 	
@@ -77,7 +79,7 @@ protected:
 	void AddHealth(float Amount) { SetHealth(Health + Amount); }
 	UFUNCTION(BlueprintCallable)
 	void RemoveHealth(float Amount) { SetHealth(Health - Amount); }
-	bool IsDead() const { return Health == 0.0f; }
+	
 
 	// Функции связанные с Armor
 	void AddArmor(float Amount) { SetArmor(Armor + Amount); }

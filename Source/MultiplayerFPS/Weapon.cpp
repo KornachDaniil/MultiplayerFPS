@@ -38,7 +38,7 @@ void AWeapon::SetOwner(AActor* NewOwner)
 
 void AWeapon::StartFire()
 {
-	if (!bWantsFire || GetWorldTimerManager().GetTimerRemaining(FireTimer) > 0.0f)
+	if (bWantsFire == false || GetWorldTimerManager().GetTimerRemaining(FireTimer) > 0.0f)
 	{
 		return;
 	}
@@ -65,7 +65,7 @@ void AWeapon::StartFire()
 		Character->MulticastPlayAnimMontage(FireAnimMontage);
 	}
 
-	if (FireMode == EWeaponFireMode::Automatic && bWantsFire)
+	if (FireMode == EWeaponFireMode::Automatic)
 	{
 		GetWorldTimerManager().SetTimer(FireTimer, this, &AWeapon::StartFire, FireRate);
 	}
