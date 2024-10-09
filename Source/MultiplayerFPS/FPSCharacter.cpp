@@ -37,20 +37,20 @@ void AFPSCharacter::ApplyDamage(float Damage, AFPSCharacter* DamageCauser)
 	}
 }
 
-void AFPSCharacter::AddWeapon(EWeaponType WeaponType)
+bool AFPSCharacter::AddWeapon(EWeaponType WeaponType)
 {
 	const int32 NewWeaponIndex = ENUM_TO_INT32(WeaponType);
 
 	if (!WeaponClasses.IsValidIndex(NewWeaponIndex) || Weapons[NewWeaponIndex] != nullptr)
 	{
-		return;
+		return false;
 	}
 
 	UClass* WeaponClass = WeaponClasses[NewWeaponIndex];
 
 	if (WeaponClass == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	FActorSpawnParameters SpawnParameters = FActorSpawnParameters();
@@ -61,12 +61,13 @@ void AFPSCharacter::AddWeapon(EWeaponType WeaponType)
 
 	if (NewWeapon == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	NewWeapon->SetActorHiddenInGame(true);
 	Weapons[NewWeaponIndex] = NewWeapon;
 	NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "GripPoint");
+	return true;
 }
 
 int32 AFPSCharacter::GetWeaponAmmo() const

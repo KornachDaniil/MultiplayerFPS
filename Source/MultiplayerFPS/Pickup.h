@@ -13,11 +13,8 @@ class MULTIPLAYERFPS_API APickup : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
-	APickup();
-
 protected:
+	APickup();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void OnPickup(AFPSCharacter* Character);

@@ -29,7 +29,7 @@ public:
 	UFUNCTION(Client, Unreliable)
 	void ClientPlaySound2D(USoundBase* Sound);
 
-	void AddWeapon(EWeaponType WeaponType);
+	bool AddWeapon(EWeaponType WeaponType);
 
 	UFUNCTION(BlueprintCallable, Category = "FPS Character")
 	int32 GetWeaponAmmo() const;
@@ -56,6 +56,12 @@ public:
 	void SetArmor(float Amount) { Armor = Amount; }
 	void ArmorAbsorbDamage(float& Damage);
 
+	// Серверные функции
+	UFUNCTION(Server, Reliable)
+	void ServerCycleWeapons(int32 Direction);
+	UFUNCTION(Server, Reliable)
+	void ServerEquipWeapon(EWeaponType WeaponType);
+	
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FollowCamera;
 	
@@ -76,12 +82,6 @@ protected:
 	void Railgun(const FInputActionValue& Value);
 	void PreviousWeapon(const FInputActionValue& Value);
 	void NextWeapon(const FInputActionValue& Value);
-
-	// Серверные функции
-	UFUNCTION(Server, Reliable)
-	void ServerCycleWeapons(int32 Direction);
-	UFUNCTION(Server, Reliable)
-	void ServerEquipWeapon(EWeaponType WeaponType);
 
 	bool EquipWeapon(EWeaponType WeaponType, bool bPlaySound = true);
 
