@@ -44,6 +44,18 @@ public:
 
 	bool IsDead() const { return Health == 0.0f; }
 
+	//  Функции связанные с Health
+	UFUNCTION(BlueprintCallable)
+	void SetHealth(float Amount) { Health = FMath::Max(Amount, 0); }
+	void AddHealth(float Amount) { SetHealth(Health + Amount); }
+	UFUNCTION(BlueprintCallable)
+	void RemoveHealth(float Amount) { SetHealth(Health - Amount); }
+
+	// Функции связанные с Armor
+	void AddArmor(float Amount) { SetArmor(Armor + Amount); }
+	void SetArmor(float Amount) { Armor = Amount; }
+	void ArmorAbsorbDamage(float& Damage);
+
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FollowCamera;
 	
@@ -72,19 +84,6 @@ protected:
 	void ServerEquipWeapon(EWeaponType WeaponType);
 
 	bool EquipWeapon(EWeaponType WeaponType, bool bPlaySound = true);
-
-	//  Функции связанные с Health
-	UFUNCTION(BlueprintCallable)
-	void SetHealth(float Amount) { Health = Amount; }
-	void AddHealth(float Amount) { SetHealth(Health + Amount); }
-	UFUNCTION(BlueprintCallable)
-	void RemoveHealth(float Amount) { SetHealth(Health - Amount); }
-	
-
-	// Функции связанные с Armor
-	void AddArmor(float Amount) { SetArmor(Armor + Amount); }
-	void SetArmor(float Amount) { Armor = Amount; }
-	void ArmorAbsorbDamage(float& Damage);
 
 	// Броня и хп персонажа
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category="Health")
