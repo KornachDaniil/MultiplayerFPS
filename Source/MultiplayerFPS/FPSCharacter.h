@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "MultiplayerFPS.h"
+#include "MultiplayerFPSGameModeBase.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "FPSCharacter.generated.h"
@@ -33,6 +34,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "FPS Character")
 	int32 GetWeaponAmmo() const;
+
+	UFUNCTION()
+	AWeapon* GetCurrentWeapon() const { return Weapon; }
 
 	void AddAmmo(EAmmoType AmmoType, int32 Amount) { SetAmmo(AmmoType, GetAmmo(AmmoType) + Amount); }
 	void ConsumeAmmo(EAmmoType AmmoType, int32 Amount) { SetAmmo(AmmoType, GetAmmo(AmmoType) - Amount); }
@@ -85,6 +89,9 @@ protected:
 
 	bool EquipWeapon(EWeaponType WeaponType, bool bPlaySound = true);
 
+	UPROPERTY()
+	AMultiplayerFPSGameModeBase* GameMode;
+	
 	// Броня и хп персонажа
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category="Health")
 	float Health;
@@ -124,6 +131,8 @@ protected:
 	USoundBase* SpawnSound;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FPS Character")
 	USoundBase* HitSound;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FPS Character")
+	USoundBase* DamageSound;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FPS Character")
 	USoundBase* WeaponChangeSound;
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="FPS Character")

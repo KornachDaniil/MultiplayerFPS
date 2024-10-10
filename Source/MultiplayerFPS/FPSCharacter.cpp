@@ -35,6 +35,18 @@ void AFPSCharacter::ApplyDamage(float Damage, AFPSCharacter* DamageCauser)
 	{
 		DamageCauser->ClientPlaySound2D(HitSound);
 	}
+
+	if (IsDead())
+	{
+		GameMode->OnKill(DamageCauser->GetController(), GetController());
+	}
+	else
+	{
+		if (DamageSound != nullptr)
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), DamageSound);
+		}
+	}
 }
 
 bool AFPSCharacter::AddWeapon(EWeaponType WeaponType)
@@ -112,6 +124,8 @@ void AFPSCharacter::BeginPlay()
 	}
 
 	EquipWeapon(EWeaponType::MachineGun, false);
+
+	GameMode = Cast<AMultiplayerFPSGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
 // Called to bind functionality to input
