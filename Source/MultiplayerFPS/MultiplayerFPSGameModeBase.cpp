@@ -6,7 +6,6 @@
 #include "FPSCharacter.h"
 #include "FPSGameState.h"
 #include "FPSPlayerState.h"
-#include "Weapon.h"
 
 void AMultiplayerFPSGameModeBase::OnKill(const AController* KillerController, AController* VictimController)
 {
@@ -36,7 +35,6 @@ void AMultiplayerFPSGameModeBase::OnKill(const AController* KillerController, AC
 		if (VictimCharacter != nullptr)
 		{
 			VictimCharacter->Destroy();
-			VictimCharacter->GetCurrentWeapon()->Destroy();
 			RestartPlayer(VictimController);
 		}
 	}

@@ -9,6 +9,7 @@
 #include "Net/UnrealNetwork.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "FPSMultiplayer_PlayerController.h"
 #include "Weapon.h"
 
 // Sets default values
@@ -108,6 +109,7 @@ void AFPSCharacter::BeginPlay()
 	{
 		return;
 	}
+	
 	SetHealth(50.0f);
 
 	constexpr int32 WeaponCount = ENUM_TO_INT32(EWeaponType::MAX);
@@ -157,6 +159,8 @@ void AFPSCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedPlayerInputComponent->BindAction(RailgunInputAction, ETriggerEvent::Started, this, &AFPSCharacter::Railgun);
 		EnhancedPlayerInputComponent->BindAction(PreviousWeaponInputAction, ETriggerEvent::Started, this, &AFPSCharacter::PreviousWeapon);
 		EnhancedPlayerInputComponent->BindAction(NextWeaponInputAction, ETriggerEvent::Started, this, &AFPSCharacter::NextWeapon);
+		EnhancedPlayerInputComponent->BindAction(TabInputAction, ETriggerEvent::Started, this, &AFPSCharacter::OpenTab);
+		EnhancedPlayerInputComponent->BindAction(TabInputAction, ETriggerEvent::Completed, this, &AFPSCharacter::CloseTab);
 	}
 }
 
@@ -169,6 +173,28 @@ void AFPSCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty >& OutLi
 	DOREPLIFETIME_CONDITION(AFPSCharacter, Weapon, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(AFPSCharacter, Weapons, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(AFPSCharacter, Ammo, COND_OwnerOnly);
+}
+
+
+void AFPSCharacter::FellOutOfWorld(const UDamageType& dmgType) // Не пашет
+{
+	Super::FellOutOfWorld(dmgType);
+
+	if (GameMode != nullptr)
+	{
+		GameMode->OnKill(nullptr, GetController());
+	}
+	
+}
+
+void AFPSCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	
+	for (AWeapon* WeaponToDestroy : Weapons)
+	{
+		WeaponToDestroy->Destroy();
+	}
 }
 
 void AFPSCharacter::Move(const FInputActionValue& Value)
@@ -236,6 +262,26 @@ void AFPSCharacter::PreviousWeapon(const FInputActionValue& Value)
 void AFPSCharacter::NextWeapon(const FInputActionValue& Value)
 {
 	ServerCycleWeapons(1);
+}
+
+void AFPSCharacter::OpenTab(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Open Tab"));
+	AFPSMultiplayer_PlayerController* PlayerController = Cast<AFPSMultiplayer_PlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->OpenTab();
+	}
+}
+
+void AFPSCharacter::CloseTab(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Close Tab"));
+	AFPSMultiplayer_PlayerController* PlayerController = Cast<AFPSMultiplayer_PlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->CloseTab();
+	}
 }
 
 void AFPSCharacter::ServerCycleWeapons_Implementation(int32 Direction)

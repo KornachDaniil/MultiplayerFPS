@@ -68,13 +68,14 @@ public:
 	
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FollowCamera;
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void FellOutOfWorld(const UDamageType& dmgType) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	// Функции для управления персонажем 
 	void Move(const FInputActionValue& Value);
@@ -86,6 +87,8 @@ protected:
 	void Railgun(const FInputActionValue& Value);
 	void PreviousWeapon(const FInputActionValue& Value);
 	void NextWeapon(const FInputActionValue& Value);
+	void OpenTab(const FInputActionValue& Value);
+	void CloseTab(const FInputActionValue& Value);
 
 	bool EquipWeapon(EWeaponType WeaponType, bool bPlaySound = true);
 
@@ -125,7 +128,9 @@ protected:
 	UInputAction* PreviousWeaponInputAction;
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	UInputAction* NextWeaponInputAction; 
-
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	UInputAction* TabInputAction;
+	
 	// Все что связано с AWeapon
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="FPS Character")
 	USoundBase* SpawnSound;
