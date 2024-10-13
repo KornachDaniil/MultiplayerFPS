@@ -20,7 +20,8 @@ public:
 	TArray<AFPSPlayerState*> GetPlayerStatesOrderedByKills() const;
 	
 	
-	void SetKillLimit(int32 NewKillLimit) { KillLimit = NewKillLimit; }
+	FORCEINLINE void SetKillLimit(int32 NewKillLimit) { KillLimit = NewKillLimit; }
+	FORCEINLINE int32 GetKillLimit() const { return KillLimit; }
 protected:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category="GameState")
 	int32 KillLimit;

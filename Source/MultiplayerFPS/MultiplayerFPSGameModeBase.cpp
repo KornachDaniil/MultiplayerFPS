@@ -20,6 +20,12 @@ void AMultiplayerFPSGameModeBase::OnKill(const AController* KillerController, AC
 		if (KillerState != nullptr)
 		{
 			KillerState->AddKills();
+			AFPSGameState* FPSGameState = GetGameState<AFPSGameState>();
+			if (FPSGameState != nullptr)
+			{
+				int32 NewKillLimit = FPSGameState->GetKillLimit() - 1;
+				FPSGameState->SetKillLimit(NewKillLimit);
+			}
 		}
 	}
 
